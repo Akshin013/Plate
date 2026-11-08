@@ -1,29 +1,42 @@
 
 import { NextResponse } from 'next/server';
-import { randomUUID } from 'crypto';
+import { randomUUID, createHash } from 'crypto';
 
-export async function POST(request, { params }) {
+export const runtime = 'nodejs';
+
+const COOKIE_NAME = 'carid_visitor';
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+
+async function handleLike(request, context, action) {
   try {
-    const { username } = await params;
+    const { username } = await context.params;
+    const normalizedUsername = String(username || '').trim().toLowerCase();
+
+    if (!normalizedUsername) {
+      return NextResponse.json(
+        { error: 'Username is required' },
+        { status: 400 }
+      );
+    }
+
+    let visitorId = request.cookies.get(COOKIE_NAME)?.value;
+
+    if (!visitorId || !/^[a-f0-9-]{36}$/i.test(visitorId)) {
+      visitorId = randomUUID();
+    }
+
+    const visitorHash = createHash('sha256')
+      .update(visitorId)
+      .digest('hex');
 
     const url = process.env.GOOGLE_APPS_SCRIPT_URL;
     const token = process.env.GOOGLE_APPS_SCRIPT_TOKEN;
 
     if (!url || !token) {
       return NextResponse.json(
-        { error: 'Google Apps Script environment variables are missing' },
+        { error: 'Google Apps Script is not configured' },
         { status: 500 }
       );
-    }
-
-    const normalizedUsername = decodeURIComponent(username)
-      .trim()
-      .toLowerCase();
-
-    let visitorId = request.cookies.get('carid_visitor')?.value;
-
-    if (!visitorId || !/^[a-f0-9-]{36}$/i.test(visitorId)) {
-      visitorId = randomUUID();
     }
 
     const response = await fetch(url, {
@@ -33,59 +46,43 @@ export async function POST(request, { params }) {
       },
       body: JSON.stringify({
         token,
-        action: 'view',
+        action,
         username: normalizedUsername,
-        visitorId,
+        visitorHash,
       }),
       cache: 'no-store',
-      redirect: 'follow',
       signal: AbortSignal.timeout(20000),
     });
 
-    const text = await response.text();
+    const data = await response.json();
 
-    let data;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
-      console.error('Apps Script returned non-JSON:', text.slice(0, 500));
-
-      return NextResponse.json(
-        { error: 'Google Apps Script returned invalid response' },
-        { status: 502 }
-      );
-    }
-
-    if (!response.ok || !data.ok) {
-      return NextResponse.json(
-        { error: data.error || 'Failed to update views' },
-        { status: 400 }
-      );
-    }
-
-    const result = NextResponse.json({
-      success: true,
-      username: normalizedUsername,
-      views: data.views,
-      counted: data.counted,
+    const result = NextResponse.json(data, {
+      status: response.ok ? 200 : response.status,
     });
 
-    result.cookies.set('carid_visitor', visitorId, {
+    result.cookies.set(COOKIE_NAME, visitorId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 30,
+      maxAge: COOKIE_MAX_AGE,
     });
 
     return result;
   } catch (error) {
-    console.error('View counter error:', error);
+    console.error('Like API error:', error);
 
     return NextResponse.json(
-      { error: 'Failed to record profile view' },
+      { error: 'Failed to process like' },
       { status: 500 }
     );
   }
+}
+
+export async function GET(request, context) {
+  return handleLike(request, context, 'like_status');
+}
+
+export async function POST(request, context) {
+  return handleLike(request, context, 'like');
 }

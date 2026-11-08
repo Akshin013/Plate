@@ -71,6 +71,9 @@ export default function Profile({ p }) {
   const [avaOk, setAvaOk] = useState(Boolean(p.avatar));
   const [qr, setQr] = useState(null); // ссылка для QR, null = окно закрыто
   const [views, setViews] = useState(Number(p?.views) || 0);
+  const [likes, setLikes] = useState(Number(p?.likes) || 0);
+  const [liked, setLiked] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   useEffect(() => {
     setViews(Number(p?.views) || 0);
@@ -108,6 +111,60 @@ export default function Profile({ p }) {
         console.error("Ошибка счётчика просмотров:", error);
       });
   }, [p?.username, p?.views]);
+
+  // Загружаем состояние лайка
+  useEffect(() => {
+    if (!p?.username) return;
+
+    fetch(`/api/profiles/${encodeURIComponent(p.username)}/like`, {
+      method: "GET",
+      cache: "no-store",
+    })
+      .then(async (response) => {
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Не удалось загрузить лайки");
+        }
+
+        setLikes(Number(data.likes) || 0);
+        setLiked(Boolean(data.liked));
+      })
+      .catch((error) => {
+        console.error("Ошибка загрузки лайков:", error);
+      });
+  }, [p?.username]);
+
+  // Поставить или убрать лайк
+  async function toggleLike() {
+    if (likeLoading) return;
+
+    setLikeLoading(true);
+
+    try {
+      const response = await fetch(
+        `/api/profiles/${encodeURIComponent(p.username)}/like`,
+        {
+          method: "POST",
+          cache: "no-store",
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || "Не удалось поставить лайк");
+      }
+
+      setLikes(Number(data.likes) || 0);
+      setLiked(Boolean(data.liked));
+    } catch (error) {
+      console.error("Ошибка лайка:", error);
+    } finally {
+      setLikeLoading(false);
+    }
+  }
+
   const socials = ["instagram", "telegram", "tiktok", "youtube"].filter(
     (k) => p[k],
   );
@@ -195,6 +252,30 @@ export default function Profile({ p }) {
           <span>{views.toLocaleString("ru-RU")}</span>
           <span>просмотров</span>
         </div>
+
+        <button
+          type="button"
+          className={`like-button rise ${liked ? "liked" : ""}`}
+          style={{ animationDelay: ".25s" }}
+          onClick={toggleLike}
+          disabled={likeLoading}
+          aria-label={liked ? "Убрать лайк" : "Поставить лайк"}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="19"
+            height="19"
+            fill={liked ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z" />
+          </svg>
+
+          <span>{likes.toLocaleString("ru-RU")}</span>
+        </button>
 
         {socials.length > 0 && (
           <nav
