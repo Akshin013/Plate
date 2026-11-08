@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { useState, useEffect } from 'react';
 
 const ICONS = {
   instagram: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>,
@@ -38,6 +38,41 @@ export default function Profile({ p }) {
   const [videoOk, setVideoOk] = useState(Boolean(p.video));
   const [avaOk, setAvaOk] = useState(Boolean(p.avatar));
   const [qr, setQr] = useState(null); // ссылка для QR, null = окно закрыто
+
+  useEffect(() => {
+  if (!p?.username) return;
+
+  const key = `carid_view_${p.username}`;
+  const lastView = Number(localStorage.getItem(key) || 0);
+  const now = Date.now();
+
+  // Один просмотр с одного браузера раз в 30 минут
+  if (now - lastView < 30 * 60 * 1000) return;
+
+  // Сразу записываем время, чтобы React Strict Mode
+  // не отправил два запроса подряд
+  localStorage.setItem(key, String(now));
+
+  fetch(`/api/profiles/${encodeURIComponent(p.username)}/view`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: p.username,
+    }),
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        localStorage.removeItem(key);
+        console.error('Не удалось записать просмотр профиля');
+      }
+    })
+    .catch((error) => {
+      localStorage.removeItem(key);
+      console.error('Ошибка счётчика просмотров:', error);
+    });
+}, [p?.username]);
 
   const socials = ['instagram', 'telegram', 'tiktok', 'youtube'].filter((k) => p[k]);
 

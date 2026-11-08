@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { hasAdminAccess } from '../../../../lib/admin-auth';
 import { appendProfile } from '../../../../lib/google-apps-script';
+import { getAllProfiles } from '../../../../lib/profiles';
 
 export const runtime = 'nodejs';
 
@@ -85,5 +86,20 @@ export async function POST(request) {
       ? 'Проверьте названия столбцов в первой строке Google Таблицы.'
       : error.message;
     return NextResponse.json({ error: message }, { status: 502 });
+  }
+}
+
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
+  if (!hasAdminAccess(request)) {
+    return NextResponse.json({ error: 'Сессия истекла. Войдите снова.' }, { status: 401 });
+  }
+  try {
+    const profiles = await getAllProfiles();
+    return NextResponse.json({ profiles });
+  } catch (error) {
+    console.error('Не удалось прочитать профили:', error);
+    return NextResponse.json({ error: 'Не удалось прочитать таблицу.' }, { status: 502 });
   }
 }

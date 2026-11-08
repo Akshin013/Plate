@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import AdminPanel from '../../components/AdminPanel';
 import { ADMIN_COOKIE, isValidAdminSession } from '../../lib/admin-auth';
+import AdminProfiles from '../../components/AdminProfiles';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,10 +19,14 @@ export default async function AdminPage() {
   const missingConfiguration = requiredConfiguration.filter((key) => !process.env[key]);
 
   return (
+    <>
     <AdminPanel
       authenticated={authenticated}
       missingConfiguration={missingConfiguration}
       passwordConfigured={Boolean(password)}
+    
     />
+    <AdminProfiles />
+  </>
   );
 }
