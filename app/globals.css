@@ -704,3 +704,148 @@ a{color:inherit;text-decoration:none}
   opacity: 0.6;
   cursor: wait;
 }
+
+/* PLATE QR MODAL */
+
+.plate-qr-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(14px);
+  animation: plateQrFade .25s ease;
+}
+
+.plate-qr-card {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  padding: 30px 22px 24px;
+  overflow: hidden;
+  text-align: center;
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 119, 0, .10), transparent 65%),
+    #080808;
+  border: 1px solid rgba(255, 132, 0, .8);
+  border-radius: 27px;
+  box-shadow:
+    0 0 18px rgba(255, 115, 0, .28),
+    0 0 55px rgba(255, 115, 0, .12),
+    inset 0 0 25px rgba(255, 115, 0, .04);
+  animation: plateQrIn .3s ease;
+}
+
+.plate-qr-close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  width: 34px;
+  height: 34px;
+  color: #fff;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 50%;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.plate-qr-top {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 22px;
+}
+
+.plate-qr-top span {
+  font-size: 27px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 3px;
+}
+
+.plate-qr-top small {
+  color: #ff8700;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 4px;
+}
+
+.plate-qr-frame {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 13px;
+  background: #080808;
+  border: 2px solid #ff8500;
+  border-radius: 19px;
+  box-shadow:
+    0 0 15px rgba(255, 132, 0, .25),
+    inset 0 0 12px rgba(255, 132, 0, .08);
+}
+
+.plate-qr-frame svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 280px;
+}
+
+.plate-qr-scan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  margin: 19px auto 12px;
+  padding: 13px;
+  border: 1px solid #ff8500;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 19px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 5px;
+  box-shadow: 0 0 12px rgba(255, 132, 0, .15);
+}
+
+.plate-qr-phone {
+  color: #ff8500;
+  font-size: 24px;
+}
+
+.plate-qr-url {
+  margin: 10px 0;
+  color: #858585;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.plate-qr-done {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  color: #080808;
+  background: linear-gradient(100deg, #ff7100, #ffad32);
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.plate-qr-done:active {
+  transform: scale(.98);
+}
+
+@keyframes plateQrFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes plateQrIn {
+  from { opacity: 0; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}

@@ -320,14 +320,48 @@ export default function Profile({ p }) {
       </main>
 
       {qr && (
-        <div className="modal" onClick={() => setQr(null)}>
-          <div className="box" onClick={(e) => e.stopPropagation()}>
-            <strong>Сканируй и знакомься</strong>
-            <div className="qrwrap">
-              <QRCodeSVG value={qr} size={220} />
+        <div className="plate-qr-overlay" onClick={() => setQr(null)}>
+          <div className="plate-qr-card" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="plate-qr-close"
+              onClick={() => setQr(null)}
+              aria-label="Закрыть"
+            >
+              ×
+            </button>
+
+            <div className="plate-qr-top">
+              <span>PLATE</span>
+              <small>SCAN · VIEW · CONNECT</small>
             </div>
-            <p>{qr}</p>
-            <button onClick={() => setQr(null)}>Закрыть</button>
+
+            <div className="plate-qr-frame">
+              <QRCodeSVG
+                value={qr}
+                size={280}
+                level="H"
+                bgColor="#080808"
+                fgColor="#ffffff"
+                includeMargin={true}
+                imageSettings={{
+                  src: "https://res.cloudinary.com/dvm6my9na/image/upload/v1794145851/IMG_8539_mosfda.jpg",
+                  width: 76,
+                  height: 54,
+                  excavate: true,
+                }}
+              />
+            </div>
+
+            <div className="plate-qr-scan">
+              <span className="plate-qr-phone">▯</span>
+              <span>SCAN ME</span>
+            </div>
+
+            <p className="plate-qr-url">{qr}</p>
+
+            <button className="plate-qr-done" onClick={() => setQr(null)}>
+              Закрыть
+            </button>
           </div>
         </div>
       )}
