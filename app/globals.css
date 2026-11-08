@@ -103,3 +103,353 @@ a{color:inherit;text-decoration:none}
 .adm-tags i.bad{background:rgba(255,59,48,.25);color:#ff8a80}
 .adm-err{color:#ff8a80}
 .adm-muted{color:#9aa3b5}
+.views {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.views svg {
+  opacity: 0.8;
+}
+
+/* =====================================
+   CARID — ADMIN DASHBOARD REDESIGN
+===================================== */
+
+.admin,
+.adm {
+  --admin-accent: #ffb454;
+  --admin-accent-soft: rgba(255, 180, 84, 0.12);
+  --admin-border: rgba(255, 255, 255, 0.09);
+  --admin-muted: #9295a1;
+}
+
+/* Общая страница */
+.admin {
+  width: min(100% - 32px, 920px);
+  padding: 42px 0 80px;
+}
+
+.admin h1 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 5vw, 36px);
+  font-weight: 800;
+  letter-spacing: -1.2px;
+}
+
+.admin-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--admin-muted);
+  font-size: 13px;
+  transition: color .2s;
+}
+
+.admin-back:hover {
+  color: var(--admin-accent);
+}
+
+.admin-intro {
+  margin: 0 0 28px;
+  color: var(--admin-muted);
+  font-size: 14px;
+}
+
+/* Карточки */
+.admin-card {
+  padding: 26px;
+  border: 1px solid var(--admin-border);
+  border-radius: 22px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  box-shadow: 0 18px 55px rgba(0,0,0,.25);
+  backdrop-filter: blur(20px);
+}
+
+.admin-login {
+  max-width: 460px;
+}
+
+.admin-form {
+  gap: 20px;
+}
+
+.admin-grid {
+  gap: 18px;
+}
+
+/* Поля */
+.admin label {
+  gap: 9px;
+  color: #dfe1e8;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 12px;
+  background: rgba(0,0,0,.28);
+  color: #fff;
+  font-size: 14px;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+.admin input:hover {
+  border-color: rgba(255,180,84,.3);
+}
+
+.admin input:focus {
+  outline: none;
+  border-color: var(--admin-accent);
+  background: rgba(255,180,84,.035);
+  box-shadow: 0 0 0 3px rgba(255,180,84,.10);
+}
+
+.admin input::placeholder {
+  color: #686b76;
+}
+
+.admin input[type=file] {
+  min-height: 46px;
+  cursor: pointer;
+}
+
+/* Кнопки */
+.admin button {
+  min-height: 48px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #ffc477, #ff9f43);
+  color: #17120b;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 7px 22px rgba(255,159,67,.16);
+  transition: transform .2s, filter .2s, box-shadow .2s;
+}
+
+.admin button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 28px rgba(255,159,67,.24);
+}
+
+.admin button:active:not(:disabled) {
+  transform: scale(.98);
+}
+
+.admin button:disabled {
+  box-shadow: none;
+}
+
+/* Подсказки и сообщения */
+.admin-hint,
+.admin-setup p {
+  color: var(--admin-muted);
+  line-height: 1.6;
+}
+
+.admin-error,
+.adm-err {
+  color: #ff7777;
+}
+
+.admin-success {
+  color: #73dda0;
+}
+
+/* Список профилей */
+.adm {
+  max-width: 920px;
+  margin: 34px auto 0;
+}
+
+.adm-top {
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.adm-top h2 {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+.adm-top h2 span {
+  margin-left: 6px;
+  color: var(--admin-accent);
+  font-size: 15px;
+}
+
+.adm-top button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--admin-border);
+  border-radius: 11px;
+  background: rgba(255,255,255,.05);
+  color: #ddd;
+  font-size: 12px;
+  font-weight: 600;
+  transition: .2s;
+}
+
+.adm-top button:hover {
+  border-color: var(--admin-accent);
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent);
+}
+
+/* Поиск */
+.adm-search {
+  height: 50px;
+  margin: 0 0 18px;
+  padding: 0 16px;
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  background: rgba(255,255,255,.035);
+  font-size: 14px;
+  transition: .2s;
+}
+
+.adm-search:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px rgba(255,180,84,.08);
+}
+
+.adm-search::placeholder {
+  color: #777b87;
+}
+
+/* Строки автомобилей */
+.adm-list {
+  gap: 11px;
+}
+
+.adm-row {
+  min-width: 0;
+  padding: 16px;
+  gap: 14px;
+  border: 1px solid var(--admin-border);
+  border-radius: 17px;
+  background: linear-gradient(120deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  transition: border-color .2s, background .2s, transform .2s;
+}
+
+.adm-row:hover {
+  border-color: rgba(255,180,84,.35);
+  background: rgba(255,180,84,.045);
+  transform: translateY(-1px);
+}
+
+.adm-row.off {
+  opacity: .48;
+  filter: grayscale(.5);
+}
+
+.adm-info {
+  gap: 5px;
+}
+
+.adm-info strong {
+  color: #f4f4f2;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.adm-info small {
+  color: var(--admin-muted);
+  font-size: 12px;
+}
+
+.adm-plate {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 11px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.2);
+}
+
+.adm-tags {
+  gap: 6px;
+}
+
+.adm-tags i {
+  padding: 5px 8px;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 8px;
+  background: rgba(255,255,255,.055);
+  color: #bfc2cc;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.adm-tags i.bad {
+  border-color: rgba(255,100,100,.15);
+  background: rgba(255,80,80,.10);
+  color: #ff8585;
+}
+
+.adm-muted {
+  color: var(--admin-muted);
+}
+
+/* Адаптация под телефон */
+@media (max-width: 600px) {
+  .admin {
+    width: calc(100% - 24px);
+    padding-top: 24px;
+  }
+
+  .admin h1 {
+    font-size: 28px;
+  }
+
+  .admin-card {
+    padding: 19px;
+    border-radius: 18px;
+  }
+
+  .adm {
+    margin-top: 28px;
+  }
+
+  .adm-top h2 {
+    font-size: 19px;
+  }
+
+  .adm-row {
+    flex-wrap: wrap;
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .adm-info {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .adm-tags {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin *,
+  .adm * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

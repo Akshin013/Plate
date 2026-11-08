@@ -1,5 +1,6 @@
 
 import { NextResponse } from 'next/server';
+import { randomUUID } from 'crypto';
 
 export async function POST(request, { params }) {
   try {
@@ -15,6 +16,16 @@ export async function POST(request, { params }) {
       );
     }
 
+    const normalizedUsername = decodeURIComponent(username)
+      .trim()
+      .toLowerCase();
+
+    let visitorId = request.cookies.get('carid_visitor')?.value;
+
+    if (!visitorId || !/^[a-f0-9-]{36}$/i.test(visitorId)) {
+      visitorId = randomUUID();
+    }
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -23,7 +34,8 @@ export async function POST(request, { params }) {
       body: JSON.stringify({
         token,
         action: 'view',
-        username: decodeURIComponent(username).trim().toLowerCase(),
+        username: normalizedUsername,
+        visitorId,
       }),
       cache: 'no-store',
       redirect: 'follow',
@@ -52,12 +64,22 @@ export async function POST(request, { params }) {
       );
     }
 
-    return NextResponse.json({
+    const result = NextResponse.json({
       success: true,
-      username,
+      username: normalizedUsername,
       views: data.views,
+      counted: data.counted,
     });
 
+    result.cookies.set('carid_visitor', visitorId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
+    return result;
   } catch (error) {
     console.error('View counter error:', error);
 
