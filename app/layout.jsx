@@ -1,8 +1,19 @@
 import './globals.css';
 import AutoRefresh from '../components/AutoRefresh';
 
-export const metadata = { title: 'CarId', description: 'Профиль автолюбителя: машина, номер, соцсети' };
-export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover' };
+export const metadata = {
+  title: 'Plate',
+  description: 'Plate',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+};
 
 export default function RootLayout({ children }) {
   return (

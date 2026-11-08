@@ -3,7 +3,10 @@
 html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
-
+html {
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+}
 .amb{position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse at 50% 20%,#1d2233 0,#06070b 70%)}
 .amb video{width:100%;height:100%;object-fit:cover;filter:blur(40px) saturate(1.5) brightness(.55);transform:scale(1.3)}
 
