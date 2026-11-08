@@ -106,7 +106,7 @@ export default function Profile({ p }) {
       .catch((error) => {
         localStorage.removeItem(key);
         console.error("Ошибка счётчика просмотров:", error);
-      });      
+      });
   }, [p?.username, p?.views]);
   const socials = ["instagram", "telegram", "tiktok", "youtube"].filter(
     (k) => p[k],
@@ -115,7 +115,19 @@ export default function Profile({ p }) {
   return (
     <>
       <div className="amb">
-        {videoOk && <video src={p.video} autoPlay muted loop playsInline />}
+        {videoOk && (
+          <video
+            src={p.video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            onCanPlay={(e) => {
+              e.currentTarget.muted = true;
+              e.currentTarget.play().catch(console.warn);
+            }}
+          />
+        )}
       </div>
 
       <main className="profile">
@@ -128,6 +140,10 @@ export default function Profile({ p }) {
               loop
               playsInline
               preload="auto"
+              onCanPlay={(e) => {
+                e.currentTarget.muted = true;
+                e.currentTarget.play().catch(console.warn);
+              }}
               onError={() => setVideoOk(false)}
             />
           ) : (
