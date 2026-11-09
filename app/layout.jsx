@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body>
-        <AutoRefresh />
+        <AutoRefresh /> BYD 
         {children}
       </body>
     </html>
