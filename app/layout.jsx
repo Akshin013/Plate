@@ -1,5 +1,6 @@
 import './globals.css';
 import AutoRefresh from '../components/AutoRefresh';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'Plate',
@@ -19,8 +20,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body>
-        <AutoRefresh /> 
+        <AutoRefresh />
         {children}
+        <Analytics />
       </body>
     </html>
   );
