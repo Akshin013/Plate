@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import AdminPanel from '../../components/AdminPanel';
 import { ADMIN_COOKIE, isValidAdminSession } from '../../lib/admin-auth';
 import AdminProfiles from '../../components/AdminProfiles';
+import AdminEvents from '../../components/AdminEvents';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,7 @@ export default async function AdminPage() {
     
     />
     <AdminProfiles />
+    <AdminEvents />
   </>
   );
 }
