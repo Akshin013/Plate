@@ -12,10 +12,10 @@ export async function generateMetadata({ params }) {
   if (!p) return {};
 
   const title = `${p.name} · ${p.car.brand} ${p.car.model}`;
-  const description = `Avtomobil profili: ${p.car.brand} ${p.car.model}. ${p.plate ? `Dövlət nömrəsi: ${p.plate}.` : ''} CarId — avtomobilinin rəqəmsal profili.`;
+  const description = `Avtomobil profili: ${p.car.brand} ${p.car.model}. ${p.plate ? `Dövlət nömrəsi: ${p.plate}.` : ''} Plate — avtomobilinin rəqəmsal profili.`;
 
   const image = p.avatar || '/og-image.jpg';
-  const url = `https://carid.az/${p.username}`;
+  const url = `https://plate-rose.vercel.app/${p.username}`;
 
   return {
     title,
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
       title,
       description,
       url,
-      siteName: 'CarId',
+      siteName: 'Plate',
       type: 'profile',
       images: [
         {
